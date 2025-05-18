@@ -6,13 +6,8 @@ on:
   workflow_dispatch:       # Enables manual trigger from GitHub UI
 
 jobs:
-  run-challenge-alert:
+  test:
     runs-on: ubuntu-latest
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      EMAIL_USER: ${{ secrets.EMAIL_USER }}
-      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-      EMAIL_TO: ${{ secrets.EMAIL_TO }}
     steps:
       - uses: actions/checkout@v3
 
@@ -24,5 +19,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Playwright test for challenges alert
-        run: npx playwright test tests/challenge-alert.spec.js --reporter=list
+      - name: Install Playwright browsers
+        run: npx playwright install
+
+      - name: Run Playwright tests
+        run: npx playwright test
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
