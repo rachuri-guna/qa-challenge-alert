@@ -1,0 +1,28 @@
+name: Weekly Challenge Alert
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'    # Runs every Monday at 9:00 AM UTC
+  workflow_dispatch:       # Enables manual trigger from GitHub UI
+
+jobs:
+  run-challenge-alert:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+      EMAIL_TO: ${{ secrets.EMAIL_TO }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Playwright test for challenges alert
+        run: npx playwright test tests/challenge-alert.spec.js --reporter=list
