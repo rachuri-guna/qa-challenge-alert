@@ -6,7 +6,7 @@ on:
   workflow_dispatch:       # Enables manual trigger from GitHub UI
 
 jobs:
-  test:
+  WeeklyChallengeAlert:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v3
@@ -25,7 +25,7 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           EMAIL_USER: ${{ secrets.EMAIL_USER }}
           EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
           EMAIL_TO: ${{ secrets.EMAIL_TO }}
