@@ -25,7 +25,7 @@ Output only the formatted summary.
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model: 'llama-4-scout',
+        model: 'meta-llama/llama-4-scout:free',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.3,
       },
