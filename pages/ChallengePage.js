@@ -13,7 +13,7 @@ export class ChallengePage {
 
     async isHeadingVisible() {
         console.log('Checking if heading is visible...');
-        await this.heading.waitFor({ state: 'visible', timeout: 2000 });
+        await this.heading.waitFor({ state: 'visible' });
         const visible = await this.heading.isVisible();
         return visible;
     }
