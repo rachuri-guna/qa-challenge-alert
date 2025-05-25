@@ -24,13 +24,7 @@ export class ChallengePage {
     async getLiveChallengeLinksAndTitles() {
         console.log('Fetching live challenge links and titles...');
         const links = [];
-        const isVisible = await this.challengeCards.first().isVisible().catch(() => false);
-        if (!isVisible) {
-            console.warn('⚠️ No challenge cards found.');
-            return links;
-        }
         const count = await this.challengeCards.count();
-        console.log(`✅ Found ${count} challenge cards.`);
         for (let i = 0; i < count; i++) {
             const card = this.challengeCards.nth(i);
             const title = await card.locator('.challenge-name').textContent();
