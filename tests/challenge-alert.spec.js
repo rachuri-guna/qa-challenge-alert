@@ -10,7 +10,12 @@ test.describe.configure({ mode: 'serial' });
 let challengePage;
 test.beforeEach(async ({ page }) => {
     challengePage = new ChallengePage(page);
-    await challengePage.goto();
+});
+
+test('Navigate to Challenge Page', async () => {
+  await challengePage.goto();
+  const url = await challengePage.page.url();
+  await expect(url).toContain('/challenges');
 });
 
 test('Checking Challenge Page Heading Visibility', async () => {
@@ -50,7 +55,7 @@ test('Weekly QA Challenge Alert', async () => {
         try {
             console.log(`🔍 Visiting challenge: ${ch.title}`);
             await challengePage.goto(ch.link, { waitUntil: 'domcontentloaded', timeout: 30000 });
-            const htmlContent = await challengePage.content();
+            const htmlContent = await challengePage.page.content();
             console.log(`📝 Summarizing challenge: ${ch.title}`);
             const summary = await getAISummary(htmlContent);
             challengeSummaries.push(`### ${ch.title}\n${summary}`);
