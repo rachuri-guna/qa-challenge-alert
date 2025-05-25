@@ -1,7 +1,7 @@
 export class ChallengePage {
     constructor(page) {
         this.page = page;
-        this.heading = page.locator('#challenge-list-title');
+        this.heading = page.getByRole('heading', { name: 'Hackathons, Programming Challenges, and Coding Competitions' });
         this.liveSection = page.locator("//div[@class='ongoing challenge-list']");
         this.challengeCards = this.liveSection.locator("//div[@class='challenge-card-modern']");
     }
@@ -13,7 +13,7 @@ export class ChallengePage {
 
     async isHeadingVisible() {
         console.log('Checking if heading is visible...');
-        await this.heading.waitFor({ state: 'visible', timeout: 10000 });
+        await this.heading.waitFor({ state: 'visible', timeout: 2000 });
         const visible = await this.heading.isVisible();
         return visible;
     }
