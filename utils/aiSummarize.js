@@ -1,33 +1,45 @@
-import OpenAI from 'openai';
+import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export async function getAISummary(htmlContent) {
   const prompt = `
-You are an assistant that reads the HTML content of a coding challenge page and extracts a short, clear summary useful for QA automation engineers.
+You are a helpful assistant that reads the HTML content of a challenge page (such as coding contests, hackathons, or ideation challenges) and creates a short, clear summary for enthusiastic participants.
 
 Here is the HTML content:
 ${htmlContent}
 
-Please provide the summary in this format:
-Challenge: <name>
-💼 Role: <role> | 📍 Location: <location> |Type: <Full-time/Part-time/Contract> | 📈 Experience: <years> | 🕒 Deadline: <date>
-Apply Now: <Direct Link>
+Please extract and summarize the challenge using this pipe format:
 
-If any information is missing, please write "Not specified" for that field.
+Challenge: <Name>  
+💡 Type: <Type> | 💼 Organiser: <Host> | 📍 Location: <Location> | 🎯 Eligibility: <Eligibility> | 📈 Experience: <Level> | 🏆 Rewards: <Prizes> | 🕒 Deadline: <Date>  
+🔗 Apply: <Direct Link>
 
-Keep it concise and professional.
+Use "Not specified" if any info is missing.  
+Keep it concise, clean, and useful for emails.
+
+Output only the formatted summary.
 `;
 
-  const response = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo',  // or 'gpt-4' if you have access
-    messages: [{ role: 'user', content: prompt }],
-    temperature: 0.3,
-  });
+  try {
+    const response = await axios.post(
+      'https://openrouter.ai/api/v1/chat/completions',
+      {
+        model: 'mistralai/mixtral-8x7b',
+        messages: [{ role: 'user', content: prompt }],
+        temperature: 0.3,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
-  return response.choices[0].message.content.trim();
+    return response.data.choices[0].message.content.trim();
+  } catch (error) {
+    console.error('AI summarization failed:', error.response?.data || error.message);
+    return '⚠️ AI summarization failed. Please check the logs.';
+  }
 }
