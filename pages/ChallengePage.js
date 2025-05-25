@@ -1,9 +1,7 @@
 export class ChallengePage {
     constructor(page) {
         this.page = page;
-        this.heading = page.getByRole('heading', {
-            name: 'Hackathons, Programming Challenges, and Coding Competitions'
-        });
+        this.heading = page.locator('#challenge-list-title');
         this.liveSection = page.locator("//div[@class='ongoing challenge-list']");
         this.challengeCards = this.liveSection.locator("//div[@class='challenge-card-modern']");
     }
