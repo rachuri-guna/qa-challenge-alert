@@ -13,6 +13,7 @@ export class ChallengePage {
 
     async isHeadingVisible() {
         console.log('Checking if heading is visible...');
+        await this.heading.waitFor({ state: 'visible'});
         return this.heading.isVisible();
     }
 
