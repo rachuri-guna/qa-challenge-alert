@@ -9,20 +9,31 @@ test('Weekly QA Challenge Alert', async ({ page }) => {
     const challengePage = new ChallengePage(page);
     await challengePage.goto();
 
-    await expect(await challengePage.isHeadingVisible()).toBeTruthy();
+    const headingVisible = await challengePage.isHeadingVisible();
+    await expect(headingVisible).toBeTruthy();
 
     const challenges = await challengePage.getLiveChallengeLinksAndTitles();
+
+    if (!challenges.length) {
+        console.warn('⚠️ No live challenges found. Skipping summarization and email.');
+        return;
+    }
 
     const challengeSummaries = [];
 
     for (const ch of challenges) {
-      await page.goto(ch.link);
-      const htmlContent = await page.content(); // full HTML of challenge page
-    
-      const summary = await getAISummary(htmlContent);
-      challengeSummaries.push(summary);
+        try {
+            console.log(`🔍 Visiting challenge: ${ch.title}`);
+            await page.goto(ch.link, { waitUntil: 'domcontentloaded', timeout: 30000 });
+            const htmlContent = await page.content();
+
+            const summary = await getAISummary(htmlContent);
+            challengeSummaries.push(`### ${ch.title}\n${summary}`);
+        } catch (error) {
+            console.error(`❌ Failed to summarize challenge: ${ch.title}`, error.message);
+        }
     }
-    
+
     const finalSummary = challengeSummaries.join('\n\n');
-    await sendEmail('🧠 Weekly Challenges from HackerEarth', finalsummary);
+    await sendEmail('🧠 Weekly Challenges from HackerEarth', finalSummary);
 });
