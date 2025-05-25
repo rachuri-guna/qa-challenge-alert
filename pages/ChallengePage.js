@@ -14,7 +14,8 @@ export class ChallengePage {
     async isHeadingVisible() {
         console.log('Checking if heading is visible...');
         await this.heading.waitFor({ state: 'visible', timeout: 10000 });
-        return this.heading.isVisible();
+        const visible = await this.heading.isVisible();
+        return visible;
     }
 
     async getLiveChallengeLinksAndTitles() {
