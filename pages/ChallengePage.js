@@ -8,7 +8,10 @@ export class ChallengePage {
 
     async goto() {
         console.log('Navigating to challenges page...');
-        await this.page.goto('https://www.hackerearth.com/challenges/', { waitUntil: 'networkidle' });
+        await this.page.goto('https://www.hackerearth.com/challenges/', {
+            waitUntil: 'domcontentloaded',
+            timeout: 60000,
+        });
     }
 
     async isHeadingVisible() {
@@ -21,15 +24,23 @@ export class ChallengePage {
     async getLiveChallengeLinksAndTitles() {
         console.log('Fetching live challenge links and titles...');
         const links = [];
+        const isVisible = await this.challengeCards.first().isVisible().catch(() => false);
+        if (!isVisible) {
+            console.warn('⚠️ No challenge cards found.');
+            return links;
+        }
         const count = await this.challengeCards.count();
-        console.log(`Found ${count} challenge cards.`);
+        console.log(`✅ Found ${count} challenge cards.`);
         for (let i = 0; i < count; i++) {
             const card = this.challengeCards.nth(i);
-            const title = await card.locator(".challenge-name").textContent();
-            const link = await card.locator("a.challenge-card-link").getAttribute("href");
+            const title = await card.locator('.challenge-name').textContent();
+            const link = await card.locator('a.challenge-card-link').getAttribute('href');
+            if (!title || !link) continue;
+
             const absoluteLink = link.startsWith('http') ? link : `https://www.hackerearth.com${link}`;
             links.push({ title: title.trim(), link: absoluteLink });
         }
         return links;
     }
 }
+
