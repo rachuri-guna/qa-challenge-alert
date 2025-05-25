@@ -24,7 +24,7 @@ Keep it concise and professional.
 `;
 
   const response = await openai.chat.completions.create({
-    model: 'gpt-4o-mini',  // or 'gpt-4' if you have access
+    model: 'gpt-3.5-turbo',  // or 'gpt-4' if you have access
     messages: [{ role: 'user', content: prompt }],
     temperature: 0.3,
   });
