@@ -38,6 +38,7 @@ export default defineConfig({
     video: 'retain-on-failure',
     outputDir: 'test-results/',
   },
+  forbidOnly: true,
 
   /* Configure projects for major browsers */
   projects: [
