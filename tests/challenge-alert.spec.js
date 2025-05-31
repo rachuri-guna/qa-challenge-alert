@@ -10,10 +10,10 @@ test.describe.configure({ mode: 'serial' });
 let challengePage;
 test.beforeEach(async ({ page }) => {
     challengePage = new ChallengePage(page);
+    await challengePage.goto(); 
 });
 
-test('Navigate to Challenge Page', async () => {
-  await challengePage.goto();
+test('Verify if navigated to Challenge Page', async () => {
   const url = await challengePage.page.url();
   await expect(url).toContain('/challenges');
 });
