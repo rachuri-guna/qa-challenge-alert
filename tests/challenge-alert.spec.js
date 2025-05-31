@@ -48,24 +48,29 @@ test('Validate Challenge Page Live Challenges Links', async () => {
     }
 });
 
-test('Weekly QA Challenge Alert', async () => {
-    test.setTimeout(900000); // 15 minutes timeout for this test only
+test('Weekly QA Challenge Alert', async ({ browser }) => {
+    test.setTimeout(900000); // 15 minutes
     const challenges = await challengePage.getLiveChallengeLinksAndTitles();
     const challengeSummaries = [];
     for (const ch of challenges) {
         try {
             console.log(`🔍 Visiting challenge: ${ch.title}`);
-            await challengePage.goto(ch.link, { waitUntil: 'domcontentloaded', timeout: 30000 });
-            const htmlContent = await challengePage.page.content();
+            // 🆕 Open new page for each challenge
+            const context = await browser.newContext();
+            const page = await context.newPage();
+            await page.goto(ch.link, { waitUntil: 'domcontentloaded', timeout: 30000 });
+            const htmlContent = await page.content();
             console.log(`📝 Summarizing challenge: ${ch.title}`);
             const summary = await getAISummary(htmlContent);
             console.log(`📝 Summary challenge of ${ch.title}:${summary}`);
             challengeSummaries.push(`### ${ch.title}\n${summary}`);
+            await page.close();
+            await context.close();
         } catch (error) {
             console.error(`❌ Failed to summarize challenge: ${ch.title}`, error.message);
         }
     }
-
     const finalSummary = challengeSummaries.join('\n\n');
     await sendEmail('🧠 Weekly Challenges from HackerEarth', finalSummary);
 });
+
