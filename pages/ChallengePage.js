@@ -1,4 +1,4 @@
-export class ChallengePage {
+export class ChallengePage3 {
     constructor(page) {
         this.page = page;
         this.heading = page.locator('#challenge-list-title');
@@ -10,7 +10,7 @@ export class ChallengePage {
         console.log('Navigating to challenges page...');
         await this.page.goto('https://www.hackerearth.com/challenges/', {
             waitUntil: 'domcontentloaded',
-            timeout: 60000,
+            timeout: 120000, // Increased timeout for slow loads
         });
     }
 
