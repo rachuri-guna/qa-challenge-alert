@@ -59,6 +59,7 @@ test('Weekly QA Challenge Alert', async () => {
             const htmlContent = await challengePage.page.content();
             console.log(`📝 Summarizing challenge: ${ch.title}`);
             const summary = await getAISummary(htmlContent);
+            console.log(`📝 Summary challenge of ${ch.title}:${summary}`);
             challengeSummaries.push(`### ${ch.title}\n${summary}`);
         } catch (error) {
             console.error(`❌ Failed to summarize challenge: ${ch.title}`, error.message);
