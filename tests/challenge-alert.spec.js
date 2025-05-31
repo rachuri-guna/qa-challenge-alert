@@ -48,7 +48,8 @@ test('Validate Challenge Page Live Challenges Links', async () => {
     }
 });
 
-test('Weekly QA Challenge Alert', async () => {
+test.only('Weekly QA Challenge Alert', async () => {
+    test.setTimeout(900000); // 15 minutes timeout for this test only
     const challenges = await challengePage.getLiveChallengeLinksAndTitles();
     const challengeSummaries = [];
     for (const ch of challenges) {
@@ -66,4 +67,4 @@ test('Weekly QA Challenge Alert', async () => {
 
     const finalSummary = challengeSummaries.join('\n\n');
     await sendEmail('🧠 Weekly Challenges from HackerEarth', finalSummary);
-}, 900000); // 15 minutes timeout for this test only
+});
