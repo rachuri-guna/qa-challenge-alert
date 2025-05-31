@@ -1,4 +1,4 @@
-export class ChallengePage3 {
+export class ChallengePage {
     constructor(page) {
         this.page = page;
         this.heading = page.locator('#challenge-list-title');
