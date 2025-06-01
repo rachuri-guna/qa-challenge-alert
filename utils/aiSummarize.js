@@ -3,6 +3,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export async function getAISummary(htmlContent) {
+  if (!htmlContent || htmlContent.trim() === '') {
+    return '⚠️ No HTML content provided for summarization.';
+  }
+
   const prompt = `
 You are a helpful assistant that reads the HTML content of a challenge page (such as coding contests, hackathons, or ideation challenges) and creates a short, clear summary for enthusiastic participants.
 
@@ -34,12 +38,17 @@ Output only the formatted summary.
           Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
           'Content-Type': 'application/json',
         },
+        timeout: 15000,
       }
     );
 
     return response.data.choices[0].message.content.trim();
   } catch (error) {
-    console.error('AI summarization failed:', error.response?.data || error.message);
+    console.error('AI summarization failed:', {
+      status: error.response?.status,
+      data: error.response?.data,
+      message: error.message,
+    });
     return '⚠️ AI summarization failed. Please check the logs.';
   }
 }
