@@ -3,18 +3,33 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export async function sendEmail(subject, textBody) {
+  console.log('📨 Preparing to send email...');
+
+  const { EMAIL_USER, EMAIL_PASS, EMAIL_TO } = process.env;
+
+  if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
+    console.warn('⚠️ Missing email environment variables. Email not sent.');
+    return;
+  }
+
+  try {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
-        }
+      service: 'gmail',
+      auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS,
+      },
     });
 
-    await transporter.sendMail({
-        from: `"QA Challenge Alert" <${process.env.EMAIL_USER}>`,
-        to: process.env.EMAIL_TO,
-        subject: subject,
-        text: textBody
+    const info = await transporter.sendMail({
+      from: `"QA Challenge Alert" <${EMAIL_USER}>`,
+      to: EMAIL_TO,
+      subject,
+      text: textBody,
     });
+
+    console.log(`✅ Email sent successfully: ${info.messageId}`);
+  } catch (error) {
+    console.error('❌ Failed to send email:', error.message);
+  }
 }
