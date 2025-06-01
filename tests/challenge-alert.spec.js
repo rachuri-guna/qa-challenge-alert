@@ -57,7 +57,7 @@ test('Weekly QA Challenge Alert', async ({ browser }) => {
         try {
             console.log(`🔍 Visiting challenge: ${ch.title}`);
             // 🆕 Open new page for each challenge
-            const context = await browser.newContext();
+            const context = await browser.newContext({ ignoreHTTPSErrors: true });
             const page = await context.newPage();
             await page.goto(ch.link, { waitUntil: 'domcontentloaded', timeout: 30000 });
             const htmlContent = await page.content();
