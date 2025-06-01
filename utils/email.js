@@ -1,6 +1,7 @@
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 export async function sendEmail(subject, textBody) {
   console.log('📨 Preparing to send email...');
