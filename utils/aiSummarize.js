@@ -1,6 +1,7 @@
 import axios from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 export async function getAISummary(htmlContent) {
   if (!htmlContent || htmlContent.trim() === '') {
