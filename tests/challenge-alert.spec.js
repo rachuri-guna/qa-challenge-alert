@@ -59,7 +59,7 @@ test('Weekly QA Challenge Alert', async ({ browser }) => {
             // 🆕 Open new page for each challenge
             const context = await browser.newContext({ ignoreHTTPSErrors: true });
             const page = await context.newPage();
-            await page.goto(ch.link, { waitUntil: 'domcontentloaded', timeout: 30000 });
+            await page.goto(ch.link, { waitUntil: 'domcontentloaded', timeout: 60000 });
             const htmlContent = await page.content();
             console.log(`📝 Summarizing challenge: ${ch.title}`);
             const summary = await getAISummary(htmlContent);
