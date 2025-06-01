@@ -71,7 +71,6 @@ test('Weekly QA Challenge Alert', async ({ browser }) => {
             console.error(`❌ Failed to summarize challenge: ${ch.title}`, error.message);
         }
     }
-    console.log("COMPLETED AI SUMMARY!");
     const finalSummary = challengeSummaries.join('\n\n');
     await sendEmail('🧠 Weekly Challenges from HackerEarth', finalSummary);
 });
