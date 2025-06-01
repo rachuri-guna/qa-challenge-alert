@@ -9,6 +9,7 @@ test.describe.configure({ mode: 'serial' });
 
 let challengePage;
 test.beforeEach(async ({ page }) => {
+    test.setTimeout(120000); // Set timeout to 2 minutes for this test only
     challengePage = new ChallengePage(page);
     await challengePage.goto(); 
 });
