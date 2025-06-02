@@ -63,7 +63,7 @@ test('Weekly QA Challenge Alert', async ({ browser }) => {
             const htmlContent = await page.content();
             console.log(`📝 Summarizing challenge: ${ch.title}`);
             const summary = await getAISummary(htmlContent);
-            console.log(`📝 Summary challenge of ${ch.title}:${summary}`);
+            // console.log(`📝 Summary challenge of ${ch.title}:${summary}`);
             challengeSummaries.push(`### ${ch.title}\n${summary}`);
             await page.close();
             await context.close();
