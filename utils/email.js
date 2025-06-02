@@ -22,12 +22,17 @@ export async function sendEmail(subject, textBody) {
       },
     });
 
+    // ✅ Clean + indent all lines to prevent heading formatting in Gmail
+    const cleanedText = textBody
+      .replace(/^###\s*/gm, '')          // Remove markdown headers
+      .replace(/^(\S.*)$/gm, '  $1');    // Add 2-space indent to all content lines
+
     const info = await transporter.sendMail({
       from: `"QA Challenge Alert" <${EMAIL_USER}>`,
       to: EMAIL_TO,
       subject,
-      text: textBody,
-      html: `<pre style="font-family: monospace; white-space: pre-wrap;">${textBody.replace(/^###\s+/gm, '')}</pre>`,
+      text: cleanedText,
+      html: `<pre style="font-family: monospace; white-space: pre-wrap;">${cleanedText}</pre>`,
     });
 
     console.log(`✅ Email sent successfully: ${info.messageId}`);
