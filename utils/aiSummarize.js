@@ -4,9 +4,27 @@ dotenv.config();
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'; // Optional for dev; avoid in prod
 
-export async function getAISummary(textContent) {
-  if (!textContent || textContent.trim() === '') {
-    return '⚠️ No content provided for summarization.';
+// Basic cleaner to strip HTML tags and junk characters
+function cleanText(raw) {
+  if (!raw || raw.trim() === '') return '';
+
+  // Remove HTML tags
+  let text = raw.replace(/<[^>]*>/g, ' ');
+
+  // Remove unicode control characters and non-printable chars
+  text = text.replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ');
+
+  // Replace multiple spaces/newlines with single space
+  text = text.replace(/\s+/g, ' ').trim();
+
+  return text;
+}
+
+export async function getAISummary(rawTextContent) {
+  const textContent = cleanText(rawTextContent);
+
+  if (!textContent) {
+    return '⚠️ No valid content provided for summarization.';
   }
 
   const prompt = `
@@ -17,15 +35,23 @@ Your job is to help developers and professionals quickly understand the challeng
 Here is the extracted text content of the challenge page:
 ${textContent}
 
-Please generate a summary using the following format in **English only**:
+IMPORTANT:
+- Do NOT hallucinate or invent any information not explicitly present in the text above.
+- Only summarize based on the provided content.
+- If any field (Name, Type, Host, Location, Eligibility, Experience, Rewards, Deadline, Apply Link) is missing, write "Not specified".
+- Use the following exact summary format in English only:
 
 Challenge: <Name>  
 💡 Type: <Type> | 💼 Organiser: <Host> | 📍 Location: <Location> | 🎯 Eligibility: <Eligibility> | 📈 Experience: <Level> | 🏆 Rewards: <Prizes> | 🕒 Deadline: <Date>  
 🔗 Apply: <Direct Link>
 
-Use "Not specified" if any field is missing.
+Example:
 
-⚠️ If the content is unclear, unreadable, or missing key info, simply respond with:
+Challenge: Juspay Hiring Challenge 2025  
+💡 Type: Hiring Challenge | 💼 Organiser: Juspay | 📍 Location: Danaher India Development Center (IDC), Bangalore | 🎯 Eligibility: Python Programming | 📈 Experience: 4+ years | 🏆 Rewards: 42LPA | 🕒 Deadline: June 25, 2025  
+🔗 Apply: https://www.hackerearth.com/challenges/hiring/juspay-software-engineer-hiring-challenge-2025/
+
+If the content is unclear, unreadable, or insufficient, respond only with:
 "⚠️ Challenge summary not available due to unreadable or insufficient content."
 
 Be brief, clean, and structured. The output should be ready to include in an automated email digest.
