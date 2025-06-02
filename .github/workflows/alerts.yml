@@ -2,7 +2,7 @@ name: Weekly Challenge Alert
 
 on:
   schedule:
-    - cron: '0 9 * * 1'    # Runs every Monday at 9:00 AM UTC
+    - cron: '30 3 * * *'  # This is 3:30 AM UTC → 9:00 AM IST
   workflow_dispatch:       # Enables manual trigger from GitHub UI
 
 jobs:
