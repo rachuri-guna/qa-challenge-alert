@@ -27,6 +27,7 @@ export async function sendEmail(subject, textBody) {
       to: EMAIL_TO,
       subject,
       text: textBody,
+      html: `<pre style="font-family: monospace; white-space: pre-wrap;">${textBody.replace(/^###\s+/gm, '')}</pre>`,
     });
 
     console.log(`✅ Email sent successfully: ${info.messageId}`);
