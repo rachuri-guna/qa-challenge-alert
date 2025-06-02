@@ -30,32 +30,28 @@ export async function getAISummary(rawTextContent) {
   const prompt = `
 You are an expert AI summarizer specialized in reading coding challenge pages (including hackathons, hiring challenges, and ideation contests) and generating short, structured summaries in English.
 
-Your job is to help developers and professionals quickly understand the challenge by extracting the most relevant details from the provided description.
+Your job is to help developers and professionals quickly understand the challenge by extracting the most relevant details from the provided description **only**.
 
 Here is the extracted text content of the challenge page:
 ${textContent}
 
-IMPORTANT:
-- Do NOT hallucinate or invent any information not explicitly present in the text above.
-- Only summarize based on the provided content.
-- If any field (Name, Type, Host, Location, Eligibility, Experience, Rewards, Deadline, Apply Link) is missing, write "Not specified".
-- Use the following exact summary format in English only:
+⚠️ Very important instructions:
+- Your output **must only** include the 3-line summary in the format below.
+- ❌ Do NOT add titles, markdown headers (like ###), bullet points, or any other extra commentary.
+- ❌ Do NOT hallucinate any information that is not explicitly found in the input content.
+- ✅ Use "Not specified" if any detail is missing.
+- ⚠️ If the page content is unreadable or lacks enough info, respond with:
+  "⚠️ Challenge summary not available due to unreadable or insufficient content."
 
-Challenge: <Name>  
-💡 Type: <Type> | 💼 Organiser: <Host> | 📍 Location: <Location> | 🎯 Eligibility: <Eligibility> | 📈 Experience: <Level> | 🏆 Rewards: <Prizes> | 🕒 Deadline: <Date>  
-🔗 Apply: <Direct Link>
-
-Example:
+Here is the exact required format (example):
 
 Challenge: Juspay Hiring Challenge 2025  
-💡 Type: Hiring Challenge | 💼 Organiser: Juspay | 📍 Location: Danaher India Development Center (IDC), Bangalore | 🎯 Eligibility: Python Programming | 📈 Experience: 4+ years | 🏆 Rewards: 42LPA | 🕒 Deadline: June 25, 2025  
+💡 Type: Hiring Challenge | 💼 Organiser: Juspay | 📍 Location: Danaher India Development Center (IDC), Bangalore | 🎯 Eligibility: Python Programming | 📈 Experience: 4+ years | 🏆 Rewards: 42 LPA | 🕒 Deadline: June 25, 2025  
 🔗 Apply: https://www.hackerearth.com/challenges/hiring/juspay-software-engineer-hiring-challenge-2025/
 
-If the content is unclear, unreadable, or insufficient, respond only with:
-"⚠️ Challenge summary not available due to unreadable or insufficient content."
+Please return only the summary in this exact format.
+`;
 
-Be brief, clean, and structured. The output should be ready to include in an automated email digest.
-  `;
 
   try {
     const response = await axios.post(
