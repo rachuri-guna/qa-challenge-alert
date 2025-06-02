@@ -13,6 +13,12 @@ export async function sendEmail(subject, textBody) {
     return;
   }
 
+  // 🧹 Remove lines starting with ###
+  const cleanedTextBody = textBody
+    .split('\n')
+    .filter(line => !line.trim().startsWith('###'))
+    .join('\n');
+
   try {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -22,17 +28,11 @@ export async function sendEmail(subject, textBody) {
       },
     });
 
-    // ✅ Clean + indent all lines to prevent heading formatting in Gmail
-    const cleanedText = textBody
-      .replace(/^###\s*/gm, '')          // Remove markdown headers
-      .replace(/^(\S.*)$/gm, '  $1');    // Add 2-space indent to all content lines
-
     const info = await transporter.sendMail({
       from: `"QA Challenge Alert" <${EMAIL_USER}>`,
       to: EMAIL_TO,
       subject,
-      text: cleanedText,
-      html: `<pre style="font-family: monospace; white-space: pre-wrap;">${cleanedText}</pre>`,
+      text: cleanedTextBody,
     });
 
     console.log(`✅ Email sent successfully: ${info.messageId}`);
