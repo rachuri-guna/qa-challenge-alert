@@ -1,4 +1,4 @@
-# 🚀 Smart Challenge Alert
+# 🚀 Smart Weekly Challenge Alert
 
 A fully automated tool that:
 
