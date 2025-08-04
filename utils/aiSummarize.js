@@ -57,7 +57,7 @@ Please return only the summary in this exact format.
     const response = await axios.post(
       'https://openrouter.ai/api/v1/chat/completions',
       {
-        model: 'meta-llama/llama-4-scout:free',
+        model: 'meta-llama/llama-4-scout',
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.3,
       },
